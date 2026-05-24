@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\DashboardController;
 Route::get('/', function () {
-    return view('posts.index');
+    return view('public.index');
 });
 Route::get('/articles', [MainController::class, 'articles'])
     ->name('articles.index');
@@ -23,7 +23,7 @@ Route::get('/posts/about', [MainController::class, 'about'])
     ->group(function () {
 
         Route::get('/dashboard', [DashboardController::class, 'index'])
-            ->name('index');
+            ->name(/* */'index');
 
         Route::get('/dashboard/articles', [DashboardController::class, 'articles'])
             ->name('articles');

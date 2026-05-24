@@ -4,19 +4,21 @@
 
 @section('content')
 
-    <nav class="breadcrumb">
+ <nav class="breadcrumb">
 
         <a href="{{ url('home') }}">
             Accueil
         </a>
 
-        >
+
 
         <a href="{{ url('articles.index') }}">
             Articles
         </a>
 
-        >
+        <a href="{{ route('articles.show', $article->slug) }}">
+    Lire l'article
+</a>
 
         <span>
             {{ $article->title }}
@@ -31,5 +33,4 @@
         <p>{{ $article->content }}</p>
 
     </article>
-
 @endsection

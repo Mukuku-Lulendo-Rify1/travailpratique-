@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
 </head>
 <body>
+  
 
     @include('components.header')
 
