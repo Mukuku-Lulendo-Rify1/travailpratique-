@@ -45,15 +45,28 @@ Chaque root doit utiliser les directives `@yield` pour définir les zones dynami
 **Questions :**
 
 1. Quelle est la différence entre `@yield('title')` et `@yield('title', 'Valeur par défaut')` ?
+
+reponse: @yield('title') affiche uniquement le contenu défini dans la section title de la vue enfant.
+@yield('title', 'Valeur par défaut') affiche une valeur par défaut si aucune section title n’est définie dans la vue enfant.
+
 2. Pourquoi utilise-t-on `@extends` plutôt que d'inclure le header et le footer manuellement dans chaque fichier de vue ?
+reponse: @extends permet d’utiliser un layout centralisé et d’éviter la duplication du code.
+
 3. Comment s'assure-t-on qu'une vue du dashboard n'étende jamais accidentellement le layout public ?
+
+reponse:On sépare clairement les layouts :
+
+app.blade.php pour le public ;
+dashboard.blade.php pour l’administration.
 
 ---
 
 ### Question 2 — Assets & Composants de la partie publique
 
 1. Déplacez le fichier `index.css` dans le dossier `public/css/`.
+reponse : La fonction asset() permet de générer automatiquement l’URL correcte vers un fichier du dossier public/.
 2. Référencez-le dans vos layouts en utilisant la fonction **`asset()`** de Laravel.
+reponse:
 3. Créez deux **composants Blade anonymes** :
    - `resources/views/components/header.blade.php`
    - `resources/views/components/footer.blade.php`
@@ -74,7 +87,13 @@ Chaque root doit utiliser les directives `@yield` pour définir les zones dynami
 **Questions :**
 
 1. Comment rendre la classe `active` d'un lien de la sidebar **dynamique** selon la route courante, en utilisant `request()->routeIs()` ou `Route::currentRouteName()` ?
+reponse: On utilise request()->routeIs() ou Route::currentRouteName().
+
 2. Pourquoi est-il préférable de placer les composants du dashboard dans un sous-dossier `components/dashboard/` plutôt que directement dans `components/` ?
+reponse : Cela permet :
+une meilleure organisation ;
+d’éviter les conflits avec les composants publics ;
+
 
 ---
 
@@ -124,8 +143,19 @@ Exemple de routes attendues :
 **Questions :**
 
 1. Quelle est la syntaxe complète pour créer un groupe de routes avec un préfixe d'URL et un préfixe de nom en même temps ?
+reponse : Route::prefix('dashboard')
+    ->name('dashboard.')
+    ->group(function () {
+
+        Route::get('/', [DashboardController::class, 'index'])
+            ->name('index');
+
+    });
 2. Quelle est la différence entre `Route::prefix()` et `Route::middleware()` dans un groupe de routes ?
+reponse: Route::prefix() ajoute un préfixe aux URLs.
+Route::middleware() applique une protection ou un traitement aux routes.
 3. Qu'est-ce que `Route::resource()` ? Pour quelles ressources (articles, catégories, utilisateurs) serait-il pertinent de l'utiliser et quelles routes génère-t-il automatiquement ?
+Route::resource() génère automatiquement toutes les routes CRUD d’une ressource.
 
 ---
 
@@ -153,6 +183,8 @@ Chaque méthode doit retourner sa vue correspondante avec `return view('...')`.
 **Questions :**
 
 1. Quelle est la commande artisan pour générer un contrôleur ? Quelle option ajouter pour générer directement un **contrôleur de ressource** avec toutes les méthodes CRUD ?
+
+reponse: php artisan make:controller ArticleController --resource
 2. Quelle est la convention de nommage des méthodes d'un contrôleur de ressource Laravel (`index`, `show`, `create`, `store`, `edit`, `update`, `destroy`) ? À quelle action correspond chacune ?
 3. Quelle est la différence entre ces trois façons de passer des données à une vue depuis un contrôleur ?
    ```php
@@ -160,7 +192,12 @@ Chaque méthode doit retourner sa vue correspondante avec `return view('...')`.
    return view('articles', compact('posts'));
    return view('articles')->with('posts', $posts);
    ```
+reponse : 
+return view('articles', ['posts' => $posts]); Passe les données sous forme de tableau associatif.
 
+return view('articles', compact('posts'));compact() crée automatiquement un tableau avec le nom de la variable.
+
+return view('articles')->with('posts', $posts);Utilise la méthode with() pour ajouter les données à la vue.
 ---
 
 ### Question 7 — Liens et navigation
