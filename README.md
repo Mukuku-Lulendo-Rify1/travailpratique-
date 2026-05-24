@@ -50,12 +50,12 @@ reponse: @yield('title') affiche uniquement le contenu défini dans la section t
 @yield('title', 'Valeur par défaut') affiche une valeur par défaut si aucune section title n’est définie dans la vue enfant.
 
 2. Pourquoi utilise-t-on `@extends` plutôt que d'inclure le header et le footer manuellement dans chaque fichier de vue ?
+
 reponse: @extends permet d’utiliser un layout centralisé et d’éviter la duplication du code.
 
 3. Comment s'assure-t-on qu'une vue du dashboard n'étende jamais accidentellement le layout public ?
 
 reponse:On sépare clairement les layouts :
-
 app.blade.php pour le public ;
 dashboard.blade.php pour l’administration.
 
@@ -64,9 +64,9 @@ dashboard.blade.php pour l’administration.
 ### Question 2 — Assets & Composants de la partie publique
 
 1. Déplacez le fichier `index.css` dans le dossier `public/css/`.
-reponse : La fonction asset() permet de générer automatiquement l’URL correcte vers un fichier du dossier public/.
+
 2. Référencez-le dans vos layouts en utilisant la fonction **`asset()`** de Laravel.
-reponse:
+
 3. Créez deux **composants Blade anonymes** :
    - `resources/views/components/header.blade.php`
    - `resources/views/components/footer.blade.php`
@@ -87,9 +87,11 @@ reponse:
 **Questions :**
 
 1. Comment rendre la classe `active` d'un lien de la sidebar **dynamique** selon la route courante, en utilisant `request()->routeIs()` ou `Route::currentRouteName()` ?
+
 reponse: On utilise request()->routeIs() ou Route::currentRouteName().
 
 2. Pourquoi est-il préférable de placer les composants du dashboard dans un sous-dossier `components/dashboard/` plutôt que directement dans `components/` ?
+
 reponse : Cela permet :
 une meilleure organisation ;
 d’éviter les conflits avec les composants publics ;
@@ -114,10 +116,33 @@ Dans le fichier `routes/web.php`, déclarez une route nommée pour chacune des v
 **Questions :**
 
 1. Quelle est la différence entre `Route::get()` et `Route::post()` ? Dans quel cas utilise-t-on l'un plutôt que l'autre ?
+
+reponse: Route::get() est utilisé pour afficher des pages ou récupérer des données.
+Route::post() est utilisé pour envoyer ou enregistrer des données.
+
 2. Comment déclarer et nommer une route avec la méthode `->name()` ? Pourquoi les noms de routes sont-ils indispensables pour utiliser `route()` dans les vues Blade ?
+
+reponse: Route::get('/about', [MainController::class, 'about'])->name('about');
+Les noms de routes permettent d’utiliser :
+route('about')
+dans les vues Blade sans écrire l’URL manuellement.
 3. Qu'est-ce qu'un paramètre de route dynamique comme `{id}` ? Comment le récupérer dans le contrôleur ?
+
+reponse : Un paramètre dynamique permet de récupérer une valeur dans l’URL.
+
+Exemple :
+
+Route::get('/articles/{id}', [MainController::class, 'show']);
+
+Dans le contrôleur :
+
+public function show($id)
+{
+    return $id;
+}
 4. Que se passe-t-il si deux routes ont la même URL mais des méthodes HTTP différentes (`GET` et `POST`) ?
 
+reponse: Laravel différencie les routes selon la méthode HTTP.
 ---
 
 ### Question 5 — Groupement des routes du dashboard
@@ -143,6 +168,7 @@ Exemple de routes attendues :
 **Questions :**
 
 1. Quelle est la syntaxe complète pour créer un groupe de routes avec un préfixe d'URL et un préfixe de nom en même temps ?
+
 reponse : Route::prefix('dashboard')
     ->name('dashboard.')
     ->group(function () {
@@ -152,10 +178,12 @@ reponse : Route::prefix('dashboard')
 
     });
 2. Quelle est la différence entre `Route::prefix()` et `Route::middleware()` dans un groupe de routes ?
+
 reponse: Route::prefix() ajoute un préfixe aux URLs.
 Route::middleware() applique une protection ou un traitement aux routes.
 3. Qu'est-ce que `Route::resource()` ? Pour quelles ressources (articles, catégories, utilisateurs) serait-il pertinent de l'utiliser et quelles routes génère-t-il automatiquement ?
-Route::resource() génère automatiquement toutes les routes CRUD d’une ressource.
+
+reponse :Route::resource() génère automatiquement toutes les routes CRUD d’une ressource.
 
 ---
 
@@ -185,7 +213,9 @@ Chaque méthode doit retourner sa vue correspondante avec `return view('...')`.
 1. Quelle est la commande artisan pour générer un contrôleur ? Quelle option ajouter pour générer directement un **contrôleur de ressource** avec toutes les méthodes CRUD ?
 
 reponse: php artisan make:controller ArticleController --resource
+
 2. Quelle est la convention de nommage des méthodes d'un contrôleur de ressource Laravel (`index`, `show`, `create`, `store`, `edit`, `update`, `destroy`) ? À quelle action correspond chacune ?
+
 3. Quelle est la différence entre ces trois façons de passer des données à une vue depuis un contrôleur ?
    ```php
    return view('articles', ['posts' => $posts]);
